@@ -1,13 +1,23 @@
 import { Component } from 'react'
 import SingleBook from './SingleBook'
 import { Col, Form, Row } from 'react-bootstrap'
+import CommentArea from './CommentArea'
+
 
 class BookList extends Component {
   state = {
     searchQuery: '',
+    bookAsin: ''
+  }
+
+  setStateOfBooklist = (asin) => {
+    this.setState({
+      bookAsin: asin
+    })
   }
 
   render() {
+    console.log(this.state)
     return (
       <>
         <Row className="justify-content-center mt-5">
@@ -23,15 +33,22 @@ class BookList extends Component {
           </Col>
         </Row>
         <Row className="g-2 mt-3">
-          {this.props.books
-            .filter((b) =>
-              b.title.toLowerCase().includes(this.state.searchQuery)
-            )
-            .map((b) => (
-              <Col xs={12} md={4} key={b.asin}>
-                <SingleBook book={b} />
-              </Col>
-            ))}
+          <Col>
+            <Row>
+              {this.props.books
+                .filter((b) =>
+                  b.title.toLowerCase().includes(this.state.searchQuery)
+                )
+                .map((b) => (
+                  <Col xs={12} md={4} key={b.asin}>
+                    <SingleBook book={b} setStateOfBooklist={this.setStateOfBooklist} idOfThisBook={this.state.bookAsin} />
+                  </Col>
+                ))}
+            </Row>
+          </Col>
+          <Col>
+            <CommentArea bookAsin={this.state.bookAsin} />
+          </Col>
         </Row>
       </>
     )
